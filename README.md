@@ -30,6 +30,10 @@ starting from scratch on every task.
 | --- | --- |
 | `checking-design-doc-drift` | Reviews whether design documents, plans, ADRs, specs, README files, and other agent-facing docs still match the current implementation. |
 | `bilingual-user-story-writer` | Turns rough product requirements into structured User Stories or PBIs with Traditional Chinese and English output. |
+| `design-document-creator` | Creates, updates, reviews, or normalizes engineering design documents with consistent frontmatter, scope, decisions, alternatives, invariants, and testing strategy. |
+| `design-document-index-creator` | Creates or updates `index.yaml` for engineering design documents by reading Markdown frontmatter and using the bundled index script. |
+| `design-document-searcher` | Finds relevant engineering design documents for a request, code path, tag, feature, component, PR, issue, or implementation question. |
+| `design-document-re-index` | Checks whether design-document `index.yaml` files match Markdown frontmatter, then rebuilds stale indexes through the index creator workflow. |
 
 More Skills can be added over time as reusable development workflows emerge.
 
@@ -46,6 +50,21 @@ hao-loom/
       README.md
       templates/
       examples/
+    design-document-creator/
+      SKILL.md
+      agents/
+      references/
+    design-document-index-creator/
+      SKILL.md
+      agents/
+      references/
+      scripts/
+    design-document-searcher/
+      SKILL.md
+      agents/
+    design-document-re-index/
+      SKILL.md
+      agents/
 ```
 
 Each Skill lives in its own directory under `skills/`.
@@ -53,14 +72,19 @@ Each Skill lives in its own directory under `skills/`.
 Common files:
 
 - `SKILL.md`: the main instruction file consumed by an AI Agent
-- `README.md`: human-facing documentation for the Skill
+- `README.md`: optional human-facing documentation for the Skill
 - `templates/`: reusable output formats or document templates
 - `examples/`: example prompts, inputs, or expected outputs
+- `references/`: canonical reference materials or templates used by the Skill
+- `scripts/`: executable helpers used by the Skill workflow
+- `agents/`: agent-specific configuration or adapter files
 
 ## Usage
 
 Browse the `skills/` directory and choose the Skill that matches your workflow.
-Each Skill includes its own README with recommended prompts and usage notes.
+Each Skill includes a `SKILL.md` file with trigger metadata and workflow
+instructions. Some Skills also include a README with recommended prompts and
+usage notes.
 
 Example prompts:
 
@@ -70,6 +94,22 @@ Use $checking-design-doc-drift to review this repository for stale design docume
 
 ```text
 Use $bilingual-user-story-writer to turn this requirement into a bilingual PBI.
+```
+
+```text
+Use $design-document-creator to draft a design document for this feature.
+```
+
+```text
+Use $design-document-index-creator to update docs/designs/index.yaml.
+```
+
+```text
+Use $design-document-searcher to find the design docs related to this code path.
+```
+
+```text
+Use $design-document-re-index to check whether the design document index is stale.
 ```
 
 The exact installation and invocation flow depends on the AI Agent or tool
@@ -99,7 +139,8 @@ When adding a Skill, please include:
 
 1. A dedicated directory under `skills/`
 2. A `SKILL.md` file with clear trigger metadata and workflow instructions
-3. A `README.md` file for human readers
+3. Human-facing documentation, such as `README.md`, when additional usage notes
+   or examples would help readers
 4. Templates or examples if the Skill produces structured output
 5. Concise wording that helps both humans and AI Agents understand the intent
 
